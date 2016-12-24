@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Калькулятор(jq) визитки</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <section id="main">
+      <div class="conteiner">
+        <div class="row">
+          <div class="col-sm-4"><div class="calc">
+
+
+            <h2>Расчет стоимости визиток</h2>
+
+
+            <label for="card_edition">Выберете тираж</label><br>
+            <select class="form-control" name="edition" id="card_edition">
+              <option value="90">90</option>
+              <option value="120">120</option>
+              <option value="150">150</option>
+              <option value="180">180</option>
+              <option value="210">210</option>
+              <option value="240">240</option>
+              <option value="280">280</option>
+              <option value="300">300</option>
+              <option value="360">360</option>
+              <option value="420">420</option>
+              <option value="600">600</option>
+              <option value="900">900</option>
+              <option value="1020">1020</option>
+              <option value="1500">1500</option>
+              <option value="3000">3000</option>
+              
+            </select><br>
+
+
+            <label for="card_paper">Выберите бумагу</label><br>
+            <select name="card_paper" id="card_paper"class="form-control">
+                <option data-paper-radio="6.8" value="Мелованная белая бумага">мелованная белая бумага</option>
+                <option data-paper-radio="40.5" value="Бумага повышенной белизны">Бумага повышенной белизны</option>
+                <option data-paper-radio="45.0" value="Prestig лен белый">Prestig лен белый</option>
+              </option>
+            </select><br>
+
+
+            <label for="card_color">Выберите цветность</label>
+            <select name="card_color" id="card_color" class="form-control">
+
+              <option data-print="14" data-print-file="110" data-color="1" value="Односторонняя черн-белая">Односторонняя черн-белая</option>Односторонняя черн-белая
+              <option data-print="28" data-print-file="220" data-color="2" value="Двухсторонняя черно-белая">Двухсторонняя черно-белая</option>
+              <option data-print="37" data-print-file="110" data-color="3" value="Односторонняя цветная">Односторонняя цветная</option>
+              <option data-print="51" data-print-file="220" data-color="4" value="Цветная с лицевой и ч\б с обратной">Цветная с лицевой и ч\б с обратной</option>
+              <option data-print="74" data-print-file="220" data-color="5" value="Цветная двухсторонняя">Цветная двухсторонняя</option>
+            </select><br>
+            <small>Приблизительная</small>
+            <h4>Стоимость за тираж:</h4>
+            <p class="price">
+              <span id="final_price">0</span>грн.
+            </p>
+          </div></div>
+          <div class="col-sm-8">
+            <div class="card-images text-center">
+              <img src="img/viz1.jpg" alt="" id="card3">
+              <img src="img/viz2.jpg" alt="" id="card1">
+              <img src="img/viz3.jpg" alt="" id="card4">
+              <img src="img/viz4.jpg" alt="" id="card5">
+              <img src="img/viz5.jpg" alt="" id="card2">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+
+
+    <script>
+    //проверка загрузки документа
+      $(document).ready(function($) {
+        //действия при выборе в любом селекте
+        $('.calc select').change(function() {
+          //получаем выбор из первого селекта тираж кол-во
+        $edition=$('select#card_edition').val();
+        //получаем выбор из второго селекта вид бумаги
+        $paper=$('select#card_paper').val();
+        //получаем выбор из третьего селекта цвет
+        $color=$('select#card_color').val();
+        // Все атрибуты дата назначены по данным клиента (цены за подвид услуги) для окончательного рассчета стоимости
+        //Получаем значение атрибута нами назначенного в цвете
+        $color_format=$('select#card_color option:selected').attr('data-color');
+        $paper_radio=$('select#card_paper option:selected').attr('data-paper-radio');
+        $print_file=$('select#card_color option:selected').attr('data-print-file');
+        $print=$('select#card_color option:selected').attr('data-print');
+        // цифра для расчета формулы 30шт на один лист
+        $devision=30;
+        //получаем количество листов бумаги(делим тираж на 30шт на лист)
+        $final_edition=$edition/$devision;
+        //расчет по формуле клиента
+        $price=$final_edition*$paper_radio+parseInt($print_file)+$final_edition*$print;
+
+        $('span#final_price').text($price);
+
+//ВЫвод картинок на экран в зависимости от выбранного типа цвета
+
+
+        //сравниваем значение атрибута в возможными вариантами
+        if ($color_format == 1) {
+          //скрываем все картинки на странице
+          $('.card-images img').hide();
+          //выводим нужную картинку в зависимости от полученного значения назначенного атрибута
+          $('#card1').show('slow');
+        }
+        else if ($color_format == 2) {
+          $('.card-images img').hide();
+          $('#card2').show('slow');
+        }
+        else if ($color_format == 3) {
+          $('.card-images img').hide();
+          $('#card3').show('slow');
+        }
+       else if ($color_format == 4) {
+          $('.card-images img').hide();
+          $('#card4').show('slow');
+        }
+        else if($color_format == 5) {
+          $('.card-images img').hide();
+          $('#card5').show('slow');
+        }
+        });
+      });
+    </script>
+  </body>
+</html>
